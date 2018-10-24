@@ -56,10 +56,38 @@ function spaceOccupied(objs) {
     }
 }
 
+function generateWall(number, startCoordinates, direction, room, objectsList) {
+    let pos = { x: startCoordinates.x, y: startCoordinates.y };
+    for (i = 0; i < number; i++) {
+        let wall = new Item("wall", { x: pos.x, y: pos.y });
+        if (direction == "horizontal") {
+            pos.x += 50;
+        } else if (direction == "vertical") {
+            pos.y += 50;
+        }
+        objectsList.push(wall);
+        placeItem(wall, room);
+    }
+}
+
+function placeItem(obj, room) {
+    let item = document.createElement("div");
+    console.log(item);
+    item.classList.add(obj.name);
+    room.appendChild(item);
+    item.style.top = obj.location.y + "px";
+    item.style.left = obj.location.x + "px";
+}
+
 function startRoom() {
     renderStartRoom(gameWindow);
+    let room = document.querySelector("#start-room");
+
     let chest = new Item("chest", { x: 0, y: 50 });
+
+    placeItem(chest, room);
     let objs = [chest];
+    generateWall(8, { x: 100, y: 100 }, "vertical", room, objs);
     movePlayer(objs);
 }
 function renderStartRoom(win) {

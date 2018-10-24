@@ -1,0 +1,47 @@
+#game-window {
+    padding: 0px;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+    height: 500px;
+    border: 1px solid black;
+}
+
+#start-room {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(10, 10%);
+    grid-template-rows: repeat(10, 10%);
+    width: inherit;
+    height: inherit;
+}
+
+.player {
+    position: relative;
+    margin: 5px;
+    width: 40px;
+    height: 40px;
+    border: 1px solid purple;
+    border-radius: 100%;
+}
+
+/* #start-room .object {
+    top: 50px;
+    left: 0px;
+} */
+.chest {
+    position: absolute;
+    margin: 5px;
+    width: 40px;
+    height: 40px;
+    border: 1px solid brown;
+}
+
+.wall {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border: 1px solid grey;
+    background-color: darkgrey;
+}
