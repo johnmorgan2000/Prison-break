@@ -1,28 +1,34 @@
+body {
+    background-color: rgb(218, 216, 216);
+}
+
 #game-window {
     padding: 0px;
+    display: grid;
+    overflow: hidden;
+    grid-template-columns: repeat(24, 25px);
+    grid-template-rows: repeat(24, 25px);
     margin-top: 50px;
     margin-left: auto;
     margin-right: auto;
-    width: 500px;
-    height: 500px;
+    width: 600px;
+    height: 600px;
     border: 1px solid black;
+    background-color: rgb(107, 64, 101);
 }
 
 #start-room {
+    padding: 1px;
     position: relative;
-    display: grid;
-    grid-template-columns: repeat(10, 10%);
-    grid-template-rows: repeat(10, 10%);
     width: inherit;
     height: inherit;
 }
 
 .player {
     position: relative;
-    margin: 5px;
-    width: 40px;
-    height: 40px;
-    border: 1px solid purple;
+    width: 20px;
+    height: 20px;
+    border: 1px solid rgb(255, 255, 255);
     border-radius: 100%;
 }
 
@@ -32,16 +38,24 @@
 } */
 .chest {
     position: absolute;
-    margin: 5px;
-    width: 40px;
-    height: 40px;
-    border: 1px solid brown;
+    margin: 2px;
+    width: 20px;
+    height: 20px;
+    border: 1px solid rgb(231, 205, 205);
 }
 
 .wall {
+    box-sizing: border-box;
     position: absolute;
-    width: 50px;
-    height: 50px;
-    border: 1px solid grey;
-    background-color: darkgrey;
+    width: 25px;
+    height: 25px;
+    background-color: rgb(209, 208, 207);
+}
+
+.guard {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    background-color: aquamarine;
 }
