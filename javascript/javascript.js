@@ -177,16 +177,25 @@ function moveGuard(enemy, room) {
             timer++;
         }
         if (isDead(enemy)) {
-            console.log("dead");
+            renderGameOver(gameWindow);
         }
     }, 500);
 }
 
 // puts in the startroomtemplate
-function renderStartRoom(win) {
-    let source = document.querySelector("#start-room-template").innerHTML;
+function renderRoom(win) {
+    let source = document.querySelector("#room-template").innerHTML;
     win.innerHTML = source;
 }
+
+function renderGameOver(win) {
+    let source = document.querySelector("#game-over-screen").innerHTML;
+    win.innerHTML = source;
+}
+
+// function renderDeadScreen(win) {
+//     let source = document.querySelector("");
+// }
 
 function exitLevel() {
     if (player.hasKey) {
