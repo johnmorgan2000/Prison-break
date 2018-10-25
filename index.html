@@ -12,14 +12,19 @@
 
 <body>
 
-    <div id="game-window" class="container">
+    <div id="game-window" class="container"></div>
 
 
-    </div>
+    <script id="game-over-screen">
+        <div class="game-over-container text-center" >
+            <div class="game-over-message" >
+                Game Over
+            </div>
+        </div>
+    </script>
 
-
-    <script id="start-room-template" type="text/x-handlebars-template">
-        <div id="start-room">
+    <script id="room-template" type="text/x-handlebars-template">
+        <div class="room">
             <div class="player"></div>
             <div class="screen-cover"></div>
 
