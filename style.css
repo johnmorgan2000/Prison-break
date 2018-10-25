@@ -17,14 +17,14 @@ body {
     background-color: rgb(107, 64, 101);
 }
 
-#start-room {
+.room {
     padding: 1px;
     position: relative;
     width: inherit;
     height: inherit;
 }
 
-#start-room .screen-cover {
+.room .screen-cover {
     width: 450px;
     height: 550px;
     background-color: black;
@@ -33,7 +33,7 @@ body {
     right: -1px;
 }
 
-#start-room .exit {
+.room .exit {
     margin-left: 17px;
 }
 
@@ -57,7 +57,7 @@ body {
     width: 20px;
     height: 20px;
     border: 1px solid rgb(148, 104, 69);
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(134, 91, 56);
 }
 
 .wall {
@@ -83,4 +83,16 @@ body {
     background-color: rgb(239, 241, 85);
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
+}
+
+.game-over-container {
+    width: 600px;
+    height: 600px;
+    background-color: black;
+}
+
+.game-over-message {
+    margin-top: 40%;
+    font-size: 3rem;
+    color: darkred;
 }
