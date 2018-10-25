@@ -25,5 +25,5 @@ function startRoom() {
     moveGuard(guard1, room);
 }
 
-const player = new Player(1, { x: 0, y: 0 });
+const player = new Player(1, { x: 0, y: 0 }, false);
 startRoom();

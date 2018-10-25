@@ -2,9 +2,10 @@ const gameWindow = document.querySelector("#game-window");
 
 // a class used to define the player
 class Player {
-    constructor(level, location) {
+    constructor(level, location, hasKey) {
         this.level = level;
         this.location = location;
+        this.hasKey = hasKey;
     }
 }
 // a class used to define objects the player will come across
@@ -24,9 +25,40 @@ class Enemy extends Item {
 }
 
 class Chest extends Item {
-    constructor(name, location, containsKey) {
+    constructor(name, location, hasKey) {
         super(name, location);
-        this.containsKey = containsKey;
+        this.hasKey = hasKey;
+    }
+}
+
+function atChest(objs) {
+    for (obj of objs) {
+        if (obj.name == "chest") {
+            if (
+                (player.location.x == obj.location.x - 25 &&
+                    obj.location.y == player.location.y) ||
+                (player.location.x == obj.location.x + 25 &&
+                    obj.location.y == player.location.y) ||
+                (player.location.y == obj.location.y - 25 &&
+                    obj.location.x == player.location.x) ||
+                (player.location.y == obj.location.y + 25 &&
+                    obj.location.x == player.location.x)
+            ) {
+                return true;
+            }
+        }
+    }
+}
+
+function openChest(obj, event) {
+    if (event.keyCode == 67) {
+        if (obj.hasKey) {
+            player.hasKey == true;
+            obj.hasKey = false;
+            console.log("have hey");
+        } else {
+            console.log("no key");
+        }
     }
 }
 
@@ -160,5 +192,8 @@ function playerAction(objs) {
         move(event, objs);
         document.querySelector(".player").style.top = player.location.y + "px";
         document.querySelector(".player").style.left = player.location.x + "px";
+        if (atChest(objs)) {
+            openChest(obj, event);
+        }
     });
 }
