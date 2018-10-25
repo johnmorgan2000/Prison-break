@@ -31,9 +31,10 @@ class Chest extends Item {
     }
 }
 
-function atChest(objs) {
+//determines if the player is at the chest
+function atObject(objs, name) {
     for (obj of objs) {
-        if (obj.name == "chest") {
+        if (obj.name == name) {
             if (
                 (player.location.x == obj.location.x - 25 &&
                     obj.location.y == player.location.y) ||
@@ -53,7 +54,7 @@ function atChest(objs) {
 function openChest(obj, event) {
     if (event.keyCode == 67) {
         if (obj.hasKey) {
-            player.hasKey == true;
+            player.hasKey = true;
             obj.hasKey = false;
             console.log("have hey");
         } else {
@@ -139,6 +140,7 @@ function placeItem(obj, room) {
     item.style.left = obj.location.x + "px";
 }
 
+//moves the guard enemy
 function moveGuard(enemy, room) {
     let selector = "." + enemy.name;
     let timer = 1;
@@ -177,7 +179,7 @@ function moveGuard(enemy, room) {
         if (isDead(enemy)) {
             console.log("dead");
         }
-    }, 800);
+    }, 500);
 }
 
 // puts in the startroomtemplate
@@ -186,14 +188,25 @@ function renderStartRoom(win) {
     win.innerHTML = source;
 }
 
+function exitLevel() {
+    if (player.hasKey) {
+        alert("you completed the level");
+        location.reload();
+    }
+}
+
 //allows the player to move
-function playerAction(objs) {
+function playerAction(objs, exit) {
     document.addEventListener("keydown", event => {
         move(event, objs);
         document.querySelector(".player").style.top = player.location.y + "px";
         document.querySelector(".player").style.left = player.location.x + "px";
-        if (atChest(objs)) {
+        if (atObject(objs, "chest")) {
             openChest(obj, event);
+        }
+        console.log(player.hasKey);
+        if (atObject(objs, "exit")) {
+            exitLevel();
         }
     });
 }
