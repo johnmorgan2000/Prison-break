@@ -10,23 +10,22 @@ class Player {
 }
 // a class used to define objects the player will come across
 class Item {
-    constructor(name, location) {
+    constructor(name, id, location) {
         this.name = name;
         this.location = location;
+        this.id = id;
     }
 }
 
 class Enemy extends Item {
-    constructor(name, location, moveDirection, spaces) {
-        super(name, location);
-        this.moveDirection = moveDirection;
-        this.spaces = spaces;
+    constructor(name, id, location) {
+        super(name, id, location);
     }
 }
 
 class Chest extends Item {
-    constructor(name, location, hasKey) {
-        super(name, location);
+    constructor(name, id, location, hasKey) {
+        super(name, id, location);
         this.hasKey = hasKey;
     }
 }
@@ -56,15 +55,19 @@ function openChest(obj, event) {
         if (obj.hasKey) {
             player.hasKey = true;
             obj.hasKey = false;
-            console.log("have hey");
+            playerDialog("#keyFound");
         } else {
-            console.log("no key");
+            if (player.hasKey) {
+                playerDialog("#hasKey");
+            } else {
+                playerDialog("#noKey");
+            }
         }
     }
 }
 
 //Defines how movement works for the player or possibly AI
-function move(event, objs) {
+function move(player, event, objs) {
     if (event.keyCode == 38 && player.location.y != 0) {
         player.location.y -= 25;
         if (spaceOccupied(objs)) {
@@ -88,13 +91,21 @@ function move(event, objs) {
     }
 }
 
+function placePlayer() {}
+
 // Determines if the player triggers game over
 function isDead(enemy) {
     if (
         enemy.location.y == player.location.y &&
         enemy.location.x == player.location.x
     ) {
-        return true;
+        renderGameOver(gameWindow);
+    }
+}
+
+function reloadLevel() {
+    if (player.level == 1) {
+        startRoom();
     }
 }
 
@@ -113,7 +124,7 @@ function spaceOccupied(objs) {
 function generateWall(number, startCoordinates, direction, room, objectsList) {
     let pos = { x: startCoordinates.x, y: startCoordinates.y };
     for (i = 0; i < number; i++) {
-        let wall = new Item("wall", { x: pos.x, y: pos.y });
+        let wall = new Item("wall", "", { x: pos.x, y: pos.y });
         if (direction == "horizontal") {
             pos.x += 25;
         } else if (direction == "vertical") {
@@ -135,51 +146,72 @@ function placeItems(objs, room) {
 function placeItem(obj, room) {
     let item = document.createElement("div");
     item.classList.add(obj.name);
+    item.setAttribute("id", obj.id);
     room.appendChild(item);
     item.style.top = obj.location.y + "px";
     item.style.left = obj.location.x + "px";
 }
 
 //moves the guard enemy
-function moveGuard(enemy, room) {
-    let selector = "." + enemy.name;
+function moveEnemy(enemy, direction, spaces) {
+    let enemyDiv = document.getElementById(enemy.id);
     let timer = 1;
-    let totalTrip = enemy.spaces * 2 + 1;
-    setInterval(() => {
-        if (timer == totalTrip) {
-            timer = 1;
-        } else if (timer > enemy.spaces) {
-            $(selector).remove();
-            if (enemy.moveDirection == "left") {
+    let totalTrip = spaces * 2 + 1;
+    let speed = 500;
+    if (direction == "left") {
+        setInterval(() => {
+            if (timer == totalTrip) {
+                timer = 0;
+            } else if (timer > spaces) {
                 enemy.location.x += 25;
-            } else if (enemy.moveDirection == "right") {
+            } else if (timer <= spaces) {
                 enemy.location.x -= 25;
-            } else if (enemy.moveDirection == "up") {
-                enemy.location.y += 25;
-            } else if (enemy.moveDirection == "down") {
-                enemy.location.y -= 25;
             }
+            timer++;
+            isDead(enemy);
 
-            placeItem(enemy, room);
-            timer++;
-        } else if (timer <= enemy.spaces) {
-            $(selector).remove();
-            if (enemy.moveDirection == "left") {
+            enemyDiv.style.left = enemy.location.x + "px";
+        }, speed);
+    } else if (direction == "right") {
+        setInterval(() => {
+            if (timer == totalTrip) {
+                timer = 0;
+            } else if (timer > spaces) {
                 enemy.location.x -= 25;
-            } else if (enemy.moveDirection == "right") {
+            } else if (timer <= spaces) {
                 enemy.location.x += 25;
-            } else if (enemy.moveDirection == "up") {
+            }
+            timer++;
+            isDead(enemy);
+            enemyDiv.style.left = enemy.location.x + "px";
+        }, speed);
+    } else if (direction == "up") {
+        setInterval(() => {
+            if (timer == totalTrip) {
+                timer = 0;
+            } else if (timer > spaces) {
+                enemy.location.y += 25;
+            } else if (timer <= spaces) {
                 enemy.location.y -= 25;
-            } else if (enemy.moveDirection == "down") {
+            }
+            timer++;
+            isDead(enemy);
+            enemyDiv.style.top = enemy.location.y + "px";
+        }, speed);
+    } else if (direction == "down") {
+        setInterval(() => {
+            if (timer == totalTrip) {
+                timer = 0;
+            } else if (timer > spaces) {
+                enemy.location.y -= 25;
+            } else if (timer <= spaces) {
                 enemy.location.y += 25;
             }
-            placeItem(enemy, room);
             timer++;
-        }
-        if (isDead(enemy)) {
-            renderGameOver(gameWindow);
-        }
-    }, 500);
+            isDead(enemy);
+            enemyDiv.style.top = enemy.location.top + "px";
+        }, speed);
+    }
 }
 
 // puts in the startroomtemplate
@@ -199,23 +231,45 @@ function renderGameOver(win) {
 
 function exitLevel() {
     if (player.hasKey) {
-        alert("you completed the level");
-        location.reload();
+        alert("Level Complete");
+    } else {
+        playerDialog("#needKey");
     }
 }
 
 //allows the player to move
-function playerAction(objs, exit) {
+function playerAction(objs, enemies) {
     document.addEventListener("keydown", event => {
-        move(event, objs);
+        move(player, event, objs);
         document.querySelector(".player").style.top = player.location.y + "px";
         document.querySelector(".player").style.left = player.location.x + "px";
+        for (e of enemies) {
+            isDead(e);
+        }
         if (atObject(objs, "chest")) {
             openChest(obj, event);
         }
-        console.log(player.hasKey);
         if (atObject(objs, "exit")) {
-            exitLevel();
+            if (exitLevel() == true) {
+                return true;
+            }
         }
     });
+}
+
+function playerDialog(message) {
+    let container = document.querySelector(".dialog");
+    let msg = document.querySelector(message);
+    let counter = 0;
+    let timer = setInterval(() => {
+        if (counter == 10) {
+            container.style.display = "none";
+            msg.style.display = "none";
+            clearInterval(timer);
+        } else {
+            counter++;
+            container.style.display = "block";
+            msg.style.display = "block";
+        }
+    }, 100);
 }

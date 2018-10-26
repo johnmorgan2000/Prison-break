@@ -11,21 +11,33 @@
 </head>
 
 <body>
-
+    <div id="health"></div>
     <div id="game-window" class="container"></div>
 
 
-    <script id="game-over-screen">
+    <script id="game-over-screen" type="text/x-handlebars-template">
         <div class="game-over-container text-center" >
             <div class="game-over-message" >
                 Game Over
             </div>
+            <div id="refresh-button"><button onclick="location.reload()">Restart</button></div>
         </div>
     </script>
 
     <script id="room-template" type="text/x-handlebars-template">
         <div class="room">
-            <div class="player"></div>
+
+            <div class="dialog">
+                    <p id="keyFound">I Found a key</p>
+                    <p id="hasKey">I already have the key</p>
+                    <p id="noKey">No key here</p>
+                    <p id="needKey">I need to find the key</p>
+
+
+                </div>
+            <div class="player">
+                
+            </div>
             <div class="screen-cover"></div>
 
         </div>

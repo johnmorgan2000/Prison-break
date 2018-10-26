@@ -96,3 +96,26 @@ body {
     font-size: 3rem;
     color: darkred;
 }
+
+#refresh-button button {
+    border: none;
+    border-radius: 2px;
+    color: darkred;
+    background-color: rgb(77, 77, 77);
+}
+
+.dialog {
+    display: none;
+    position: absolute;
+    z-index: 2;
+    margin-left: 30%;
+    width: 200px;
+    padding: 10px;
+    color: white;
+    background-color: rgb(66, 23, 66);
+    border: 1px solid white;
+}
+.dialog p {
+    display: none;
+    margin: 0px;
+}

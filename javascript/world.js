@@ -1,15 +1,18 @@
 //The first level
 
 function startRoom() {
-    renderStartRoom(gameWindow);
-    let room = document.querySelector("#start-room");
+    renderRoom(gameWindow);
 
-    let chest = new Chest("chest", { x: 0, y: 50 }, true);
-    let exit = new Item("exit", { x: 575, y: 575 });
-    let guard1 = new Enemy("guard", { x: 125, y: 0 }, "left", 3);
+    let room = document.querySelector(".room");
 
-    let enemies = [guard1];
-    let objs = [chest, exit];
+    let chest = new Chest("chest", "chest1", { x: 0, y: 50 }, false);
+    let chest2 = new Chest("chest", "chest2", { x: 0, y: 150 }, true);
+    let exit = new Item("exit", "", { x: 575, y: 575 });
+    let guard1 = new Enemy("guard", "guard1", { x: 125, y: 0 });
+    let guard2 = new Enemy("guard", "guard2", { x: 75, y: 150 });
+
+    let enemies = [guard1, guard2];
+    let objs = [chest, chest2, exit];
 
     generateWall(22, { x: 100, y: 50 }, "vertical", room, objs);
     generateWall(3, { x: 0, y: 25 }, "horizontal", room, objs);
@@ -26,8 +29,9 @@ function startRoom() {
     placeItems(enemies, room);
     placeItems(objs, room);
 
-    playerAction(objs, exit);
-    moveGuard(guard1, room);
+    playerAction(objs, enemies);
+    moveEnemy(guard1, "left", 3);
+    moveEnemy(guard2, "up", 4);
 }
 
 const player = new Player(1, { x: 0, y: 0 }, false);
